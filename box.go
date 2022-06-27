@@ -53,7 +53,7 @@ func (b *box) ExtractByIndex(i int) (Shape, error) {
 		return nil, errors.New("error")
 	}
 
-	b.shapes[i] = nil
+	b.shapes = append(b.shapes[:i], b.shapes[i+1:]...)
 	return element, nil
 }
 
@@ -98,12 +98,13 @@ func (b *box) RemoveAllCircles() error {
 	for i := 0; i < len(b.shapes); i++ {
 		switch b.shapes[i].(type) {
 		case *Circle:
-			b.shapes[i] = nil
+			b.shapes = append(b.shapes[:i], b.shapes[i+1:]...)
+			i--
 			circlesAmount++
 		}
 	}
 
-	if circlesAmount > 0 {
+	if circlesAmount == 0 {
 		return errors.New("error")
 	}
 
